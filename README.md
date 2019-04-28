@@ -30,11 +30,11 @@ class GeneralStarExample extends Component {
         maxStars={5}
         rating={this.state.starCount}
         selectedStar={(rating) => this.onStarRatingPress(rating)}
-        emptyStar={'$'} // custom star
-        fullStar={'$'} // custom star
+        emptyStar={'💰'} // custom star
+        fullStar={'💰'} // custom star
         fullStarColor={colors.icon} // modify text color
         starSize={20} // custom font size
-        starStyle={} // custom text style
+        starStyle={{padding: 4}} // custom text style
         iconSet={'CUSTOM'}
       />
     );
