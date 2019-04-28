@@ -1,8 +1,7 @@
 // React and react native imports
 import React, { Component } from 'react';
-import { Image, StyleSheet, ViewPropTypes } from 'react-native';
+import { Image, StyleSheet, ViewPropTypes, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 
 // Third party imports
 import Button from 'react-native-button';
@@ -36,8 +35,8 @@ const propTypes = {
   buttonStyle: ViewPropTypes.style,
   disabled: PropTypes.bool.isRequired,
   halfStarEnabled: PropTypes.bool.isRequired,
-  icoMoonJson: PropTypes.string,
   iconSet: PropTypes.string.isRequired,
+  onStarButtonPress: PropTypes.func.isRequired,
   rating: PropTypes.number.isRequired,
   reversed: PropTypes.bool.isRequired,
   starColor: PropTypes.string.isRequired,
@@ -47,14 +46,11 @@ const propTypes = {
     PropTypes.number,
   ]).isRequired,
   starSize: PropTypes.number.isRequired,
-  activeOpacity: PropTypes.number.isRequired,
   starStyle: ViewPropTypes.style,
-  onStarButtonPress: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
   buttonStyle: {},
-  icoMoonJson: undefined,
   starStyle: {},
 };
 
@@ -83,47 +79,45 @@ class StarButton extends Component {
     onStarButtonPress(rating + addition);
   }
 
-  iconSetFromProps() {
-    const {
-      icoMoonJson,
-      iconSet,
-    } = this.props;
-    if (icoMoonJson) {
-      return createIconSetFromIcoMoon(icoMoonJson);
-    }
-
-    return iconSets[iconSet];
-  }
-
   renderIcon() {
     const {
-      reversed,
-      starColor,
+      iconSet,
       starIconName,
       starSize,
+      starColor,
       starStyle,
+      reversed,
     } = this.props;
-
-    const Icon = this.iconSetFromProps();
-    let iconElement;
 
     const newStarStyle = {
       transform: [{
         scaleX: reversed ? -1 : 1,
       }],
+      // Flattening because of:
+      // https://github.com/djchie/react-native-star-rating/issues/56
       ...StyleSheet.flatten(starStyle),
     };
 
-    if (typeof starIconName === 'string') {
-      iconElement = (
-        <Icon
-          name={starIconName}
-          size={starSize}
-          color={starColor}
-          style={newStarStyle}
-        />
-      );
-    } else {
+
+    let iconElement;
+    if(iconSet in iconSets){
+        const Icon = iconSets[iconSet];
+        iconElement = (
+          <Icon
+            name={starIconName}
+            size={starSize}
+            color={starColor}
+            style={newStarStyle}
+          />
+        );
+    }else if (typeof starIconName === 'string') {
+        iconElement = (
+          <Text
+            size={starSize}
+            style={[newStarStyle, {color: starColor}]}
+          >{starIconName}</Text>
+        );
+    }else {
       const imageStyle = {
         width: starSize,
         height: starSize,
@@ -148,14 +142,13 @@ class StarButton extends Component {
 
   render() {
     const {
-      activeOpacity,
-      buttonStyle,
       disabled,
+      buttonStyle,
     } = this.props;
 
     return (
       <Button
-        activeOpacity={activeOpacity}
+        activeOpacity={0.20}
         disabled={disabled}
         containerStyle={buttonStyle}
         onPress={this.onButtonPress}
