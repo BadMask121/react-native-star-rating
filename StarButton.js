@@ -113,8 +113,7 @@ class StarButton extends Component {
     }else if (typeof starIconName === 'string') {
         iconElement = (
           <Text
-            size={starSize}
-            style={[newStarStyle, {color: starColor}]}
+            style={[newStarStyle, {color: starColor, fontSize: starSize}]}
           >{starIconName}</Text>
         );
     }else {
