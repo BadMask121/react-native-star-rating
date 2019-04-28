@@ -2,7 +2,50 @@
 
 [![NPM](https://nodei.co/npm/react-native-star-rating.png?downloads=true)](https://nodei.co/npm/react-native-star-rating/)
 
-# React Native Star Rating Component
+# Fork of React Native Star Rating Component
+Fork allows for custom text to be used. 
+
+```js
+import StarRating from 'react-native-star-rating';
+
+class GeneralStarExample extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      starCount: 3.5
+    };
+  }
+
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating
+    });
+  }
+
+  render() {
+    return (
+      <StarRating
+        disabled={false}
+        maxStars={5}
+        rating={this.state.starCount}
+        selectedStar={(rating) => this.onStarRatingPress(rating)}
+        emptyStar={'$'} // custom star
+        fullStar={'$'} // custom star
+        fullStarColor={colors.icon} // modify text color
+        starSize={20} // custom font size
+        starStyle={} // custom text style
+        iconSet={'CUSTOM'}
+      />
+    );
+  }
+}
+
+export default GeneralStarExample
+```
+
+# Original README:
+
 
 > A React Native component for generating and displaying interactive star ratings. Compatible with both iOS and Android.
 
